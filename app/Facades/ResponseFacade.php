@@ -2,9 +2,11 @@
 
 namespace App\Facades;
 
+use App\Enums\GeneralErrorMsg;
 use App\Wrappers\ResponseWrapper;
 use Illuminate\Http\JsonResponse;
 use JsonSerializable;
+use Symfony\Component\HttpFoundation\Response;
 
 class ResponseFacade
 {
@@ -14,6 +16,16 @@ class ResponseFacade
             new ResponseWrapper(
                 data: $data,
                 status: $status,
+            )
+        );
+    }
+
+    public static function jsonUnhandledException(): JsonResponse
+    {
+        return self::jsonResponse(
+            new ResponseWrapper(
+                status: Response::HTTP_INTERNAL_SERVER_ERROR,
+                errors: GeneralErrorMsg::UNHANDLED_EXCEPTION_DEFAULT->value
             )
         );
     }
