@@ -12,6 +12,14 @@ class ProductsService
             'Authorization' => 'Bearer ' . $token,
         ])->get('https://zadatak.konovo.rs/products');
 
-        return $apiResponse->json();
+        $data = $apiResponse->json();
+
+        foreach ($data as &$product) {
+            if($product['categoryName'] === 'Monitori') {
+                $product['price'] = round($product['price'] * 1.10, 2);
+            }
+        }
+
+        return $data;
     }
 }

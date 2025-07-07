@@ -14,7 +14,6 @@ class ProductsController extends Controller
     {
         try {
             $data = $productsService->getAllProducts($request->bearerToken());
-
         } catch (\Exception $e) {
             return  ResponseFacade::jsonUnhandledException();
         }
