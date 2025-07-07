@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helpers\ProductFormat;
 use Illuminate\Support\Facades\Http;
 
 class ProductsService
@@ -12,16 +13,6 @@ class ProductsService
             'Authorization' => 'Bearer ' . $token,
         ])->get('https://zadatak.konovo.rs/products');
 
-        $data = $apiResponse->json();
-
-        foreach ($data as &$product) {
-            if($product['categoryName'] === 'Monitori') {
-                $product['price'] = round($product['price'] * 1.10, 2);
-            }
-
-            $product['description'] = str_replace("Brzina", "Performance", $product['description']);
-        }
-
-        return $data;
+        return ProductFormat::formatPriceAndDescription($apiResponse->json());
     }
 }
