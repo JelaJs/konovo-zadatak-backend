@@ -26,4 +26,16 @@ class ProductsService
 
         return $filteredData;
     }
+
+    public function getSingleProduct(string $token, int $productId): array|null
+    {
+        $apiResponse = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->get('https://zadatak.konovo.rs/products');
+
+        $data = ProductFormat::formatPriceAndDescription($apiResponse->json());
+
+        return collect($data)
+            ->first(fn($product) => $product['sku'] == $productId);
+    }
 }

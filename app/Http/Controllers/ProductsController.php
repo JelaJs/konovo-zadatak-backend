@@ -36,8 +36,22 @@ class ProductsController extends Controller
         return ResponseFacade::jsonSuccess(data: $data);
     }
 
-    public function show(Request $request, ProductsService $productsService): JsonResponse
+    public function show(Request $request, ProductsService $productsService, $productId): JsonResponse
     {
-        return response()->json('test');
+        try {
+            $product = $productsService->getSingleProduct($request->bearerToken(), $productId);
+
+            if(!$product) {
+                throw new NotFoundException(NotFoundMsg::PRODUCT_NOT_FOUND->value);
+            }
+        }
+        catch (NotFoundException $e) {
+            return ResponseFacade::jsonException($e);
+        }
+        catch (\Exception $e) {
+            return  ResponseFacade::jsonUnhandledException();
+        }
+
+        return ResponseFacade::jsonSuccess(data: $product);
     }
 }
