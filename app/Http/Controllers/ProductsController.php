@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\NotFoundMsg;
+use App\Exceptions\NotFoundException;
 use App\Facades\ResponseFacade;
 use App\Services\ProductsService;
 use Illuminate\Http\JsonResponse;
@@ -19,7 +21,15 @@ class ProductsController extends Controller
 
         try {
             $data = $productsService->getProducts($request->bearerToken(), $query);
-        } catch (\Exception $e) {
+
+            if(!$data) {
+                throw new NotFoundException(NotFoundMsg::PRODUCT_NOT_FOUND->value);
+            }
+        }
+        catch (NotFoundException $e) {
+            return ResponseFacade::jsonException($e);
+        }
+        catch (\Exception $e) {
             return  ResponseFacade::jsonUnhandledException();
         }
 

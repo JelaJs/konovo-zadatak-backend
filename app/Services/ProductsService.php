@@ -20,7 +20,7 @@ class ProductsService
         }
 
         $filteredData = collect($data)
-            ->filter(fn($product) => $product['categoryName'] === $query)
+            ->filter(fn($product) => strtolower($product['categoryName']) === strtolower($query))
             ->values()
             ->all();
 

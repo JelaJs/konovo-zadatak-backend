@@ -3,6 +3,7 @@
 namespace App\Facades;
 
 use App\Enums\GeneralErrorMsg;
+use App\Exceptions\Interfaces\JsonResposeable;
 use App\Wrappers\ResponseWrapper;
 use Illuminate\Http\JsonResponse;
 use JsonSerializable;
@@ -20,6 +21,14 @@ class ResponseFacade
         );
     }
 
+    public static function jsonException(JsonResposeable $exception): JsonResponse
+    {
+        return self::jsonError(
+            status: $exception->getStatusCode(),
+            errors: $exception->getMessage(),
+        );
+    }
+
     public static function jsonUnhandledException(): JsonResponse
     {
         return self::jsonResponse(
@@ -33,5 +42,15 @@ class ResponseFacade
     public static function jsonResponse(ResponseWrapper $responseWrapper): JsonResponse
     {
         return response()->json(data: $responseWrapper, status: $responseWrapper->getStatus());
+    }
+
+    public static function jsonError(int $status, array|string $errors = null): JsonResponse
+    {
+        return self::jsonResponse(
+            new ResponseWrapper(
+                status: $status,
+                errors: $errors,
+            )
+        );
     }
 }
