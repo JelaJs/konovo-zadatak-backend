@@ -18,6 +18,8 @@ class ProductsService
             if($product['categoryName'] === 'Monitori') {
                 $product['price'] = round($product['price'] * 1.10, 2);
             }
+
+            $product['description'] = str_replace("Brzina", "Performance", $product['description']);
         }
 
         return $data;
