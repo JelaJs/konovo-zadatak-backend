@@ -13,6 +13,17 @@ class ProductsService
             'Authorization' => 'Bearer ' . $token,
         ])->get('https://zadatak.konovo.rs/products');
 
-        return ProductFormat::formatPriceAndDescription($apiResponse->json());
+        $data = ProductFormat::formatPriceAndDescription($apiResponse->json());
+
+        if(!$query) {
+            return $data;
+        }
+
+        $filteredData = collect($data)
+            ->filter(fn($product) => $product['categoryName'] === $query)
+            ->values()
+            ->all();
+
+        return $filteredData;
     }
 }
