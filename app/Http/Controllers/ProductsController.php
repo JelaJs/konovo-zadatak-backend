@@ -35,4 +35,9 @@ class ProductsController extends Controller
 
         return ResponseFacade::jsonSuccess(data: $data);
     }
+
+    public function show(Request $request, ProductsService $productsService): JsonResponse
+    {
+        return response()->json('test');
+    }
 }
