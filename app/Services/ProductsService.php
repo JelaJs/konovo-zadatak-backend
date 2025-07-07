@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 
 class ProductsService
 {
-    public function getAllProducts(string $token)
+    public function getProducts(string $token, string|null $query): array
     {
         $apiResponse = Http::withHeaders([
             'Authorization' => 'Bearer ' . $token,

@@ -12,8 +12,13 @@ class ProductsController extends Controller
 {
     public function index(Request $request, ProductsService $productsService): JsonResponse
     {
+        $query = null;
+        if($request->filled('category')) {
+            $query = $request->query('category');
+        }
+
         try {
-            $data = $productsService->getAllProducts($request->bearerToken());
+            $data = $productsService->getProducts($request->bearerToken(), $query);
         } catch (\Exception $e) {
             return  ResponseFacade::jsonUnhandledException();
         }
